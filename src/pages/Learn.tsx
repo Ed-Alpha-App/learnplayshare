@@ -1,8 +1,6 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
-import { ChemicalIcon, BookIcon, LanguageIcon } from '@/components/icons/SubjectIcons';
-import { Mathematics, Chemist, BookOpen, Atom } from 'lucide-react';
+import { BookOpen, Calculator, Globe, Beaker } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface SubjectTileProps {
@@ -123,19 +121,19 @@ const Learn: React.FC = () => {
             <SubjectTile
               title="Chemistry"
               color="bg-orange-400"
-              icon={<Chemist size={24} className="text-white" />}
+              icon={<Beaker size={24} className="text-white" />}
               chapters={12}
             />
             <SubjectTile
               title="Maths"
               color="bg-green-400"
-              icon={<Mathematics size={24} className="text-white" />}
+              icon={<Calculator size={24} className="text-white" />}
               chapters={12}
             />
             <SubjectTile
               title="Social"
               color="bg-yellow-400"
-              icon={<Atom size={24} className="text-white" />}
+              icon={<Globe size={24} className="text-white" />}
               chapters={40}
             />
             <SubjectTile
