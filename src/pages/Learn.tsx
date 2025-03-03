@@ -1,14 +1,18 @@
-
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { BookOpen, Calculator, Globe, Beaker, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { createClient } from '@supabase/supabase-js';
+import { toast } from 'sonner';
 
-// Initialize Supabase client
+// Initialize Supabase client with fallback for missing credentials
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Only create the client if credentials are available
+const supabase = supabaseUrl && supabaseKey 
+  ? createClient(supabaseUrl, supabaseKey)
+  : null;
 
 interface SubjectTileProps {
   title: string;
@@ -127,6 +131,12 @@ const Learn: React.FC = () => {
   const fetchLessons = async (subject: string) => {
     setLoading(true);
     try {
+      if (!supabase) {
+        // If Supabase client isn't initialized, show an error toast and use fallback data
+        toast.error("Supabase connection not configured. Using sample data.");
+        throw new Error("Supabase client not initialized");
+      }
+      
       const { data, error } = await supabase
         .from('lessons')
         .select('*')
@@ -134,7 +144,14 @@ const Learn: React.FC = () => {
       
       if (error) throw error;
       
-      setLessons(data || []);
+      if (data && data.length > 0) {
+        setLessons(data);
+        toast.success(`Loaded ${data.length} lessons for ${subject}`);
+      } else {
+        // If no lessons found for this subject, show a notification
+        toast.info(`No lessons found for ${subject}. Showing sample data.`);
+        throw new Error("No lessons found");
+      }
     } catch (error) {
       console.error('Error fetching lessons:', error);
       // If there's an error or no lessons found, show some dummy lessons
