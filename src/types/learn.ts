@@ -5,4 +5,5 @@ export interface Lesson {
   description: string;
   video_url: string;
   subject: string;
+  progress?: number; // Optional progress percentage (0-100)
 }

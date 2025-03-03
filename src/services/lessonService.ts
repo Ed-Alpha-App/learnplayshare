@@ -37,7 +37,14 @@ export const fetchLessons = async (subject: string): Promise<Lesson[]> => {
     if (data && data.length > 0) {
       console.log(`Loaded ${data.length} lessons for ${subject}:`, data);
       toast.success(`Loaded ${data.length} lessons for ${subject}`);
-      return data;
+      
+      // Add random progress to each lesson (in a real app, this would come from the database)
+      const lessonsWithProgress = data.map(lesson => ({
+        ...lesson,
+        progress: Math.floor(Math.random() * 100) // Random progress between 0-100%
+      }));
+      
+      return lessonsWithProgress;
     } else {
       console.log(`No lessons found for ${subject}`);
       toast.info(`No lessons found for ${subject}. Showing sample data.`);
@@ -53,14 +60,16 @@ export const fetchLessons = async (subject: string): Promise<Lesson[]> => {
         title: `${subject} Lesson 1`,
         description: 'Introduction to the basics',
         video_url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-        subject: subject.toLowerCase()
+        subject: subject.toLowerCase(),
+        progress: 75 // Sample progress
       },
       {
         id: 2,
         title: `${subject} Lesson 2`,
         description: 'Advanced concepts and applications',
         video_url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-        subject: subject.toLowerCase()
+        subject: subject.toLowerCase(),
+        progress: 25 // Sample progress
       }
     ];
   }
