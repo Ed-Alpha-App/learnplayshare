@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from './Header';
 import Navigation from './Navigation';
 import ProfileSidebar from './ProfileSidebar';
@@ -10,10 +11,17 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+  
+  const isAuthPage = location.pathname === '/auth';
   
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+  
+  if (isAuthPage) {
+    return <>{children}</>;
+  }
   
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
