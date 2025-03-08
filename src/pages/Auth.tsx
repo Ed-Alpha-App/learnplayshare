@@ -2,18 +2,37 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { toast } from "sonner";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock authentication - would be replaced with actual auth
-    console.log('Authenticating with:', { email, password });
-    navigate('/');
+    setIsLoading(true);
+    
+    try {
+      // Mock authentication - would be replaced with actual auth
+      console.log('Authenticating with:', { email, password });
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Show success message
+      toast.success(isLogin ? "Signed in successfully!" : "Account created successfully!");
+      
+      // Navigate to home page
+      navigate('/');
+    } catch (error) {
+      console.error('Authentication error:', error);
+      toast.error("Authentication failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const toggleAuthMode = () => {
@@ -81,12 +100,24 @@ const Auth = () => {
           
           <button
             type="submit"
+            disabled={isLoading}
             className={cn(
               "w-full py-3 rounded-full text-white font-medium transition-all",
-              "bg-gradient-to-r from-cyan-400 to-purple-500 hover:opacity-90"
+              "bg-gradient-to-r from-cyan-400 to-purple-500 hover:opacity-90",
+              isLoading && "opacity-70 cursor-not-allowed"
             )}
           >
-            {isLogin ? 'Sign in' : 'Sign up'}
+            {isLoading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {isLogin ? 'Signing in...' : 'Signing up...'}
+              </span>
+            ) : (
+              isLogin ? 'Sign in' : 'Sign up'
+            )}
           </button>
         </form>
         
@@ -115,6 +146,15 @@ const Auth = () => {
 
 // Social login buttons
 const SocialButton = ({ type }: { type: 'twitter' | 'facebook' | 'google' }) => {
+  const navigate = useNavigate();
+  
+  const handleSocialLogin = () => {
+    // Mock social authentication
+    console.log(`Logging in with ${type}`);
+    toast.success(`Signed in with ${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    navigate('/');
+  };
+
   const getIcon = () => {
     switch (type) {
       case 'twitter':
@@ -139,7 +179,10 @@ const SocialButton = ({ type }: { type: 'twitter' | 'facebook' | 'google' }) => 
   };
 
   return (
-    <button className="w-10 h-10 rounded-full bg-[#232450] text-white flex items-center justify-center hover:bg-[#2c2d5e] transition-colors">
+    <button 
+      className="w-10 h-10 rounded-full bg-[#232450] text-white flex items-center justify-center hover:bg-[#2c2d5e] transition-colors"
+      onClick={handleSocialLogin}
+    >
       {getIcon()}
     </button>
   );
