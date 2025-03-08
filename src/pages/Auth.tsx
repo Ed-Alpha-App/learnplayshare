@@ -8,6 +8,10 @@ const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
+  const [grade, setGrade] = useState('');
+  const [mobile, setMobile] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -17,7 +21,11 @@ const Auth = () => {
     
     try {
       // Mock authentication - would be replaced with actual auth
-      console.log('Authenticating with:', { email, password });
+      if (isLogin) {
+        console.log('Authenticating with:', { email, password });
+      } else {
+        console.log('Signing up with:', { name, age, grade, mobile, email, password });
+      }
       
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 800));
@@ -68,6 +76,51 @@ const Auth = () => {
         </h2>
         
         <form onSubmit={handleSubmit} className="space-y-4">
+          {!isLogin && (
+            <>
+              <div>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Full Name"
+                  className="w-full bg-[#232450] text-white border border-purple-900/30 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="number"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  placeholder="Age"
+                  className="w-full bg-[#232450] text-white border border-purple-900/30 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  value={grade}
+                  onChange={(e) => setGrade(e.target.value)}
+                  placeholder="Grade/Class"
+                  className="w-full bg-[#232450] text-white border border-purple-900/30 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="tel"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  placeholder="Mobile Number"
+                  className="w-full bg-[#232450] text-white border border-purple-900/30 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                  required
+                />
+              </div>
+            </>
+          )}
+          
           <div>
             <input
               type="email"
