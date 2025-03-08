@@ -1,13 +1,20 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from "@/lib/utils";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  toggleSidebar: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
   return (
     <header className="sticky top-0 z-50 bg-purple-medium px-4 py-3 text-white">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+          <div 
+            className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center cursor-pointer"
+            onClick={toggleSidebar}
+          >
             <img 
               src="/lovable-uploads/e5b843f7-bfc6-4180-9ebf-29a5e0351de4.png" 
               alt="User" 
